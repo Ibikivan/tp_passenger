@@ -22,9 +22,8 @@ def ajoutBus(idBus):
     #on crée le dictionnaire et on le retourne    
     bus = {"busId" : id,
            "placesMax" : nombreDeplaces,
+           "placesDispo" : nombreDeplaces,
            "passagers" : passagers}
-    
-    idBus += 1
     
     return bus
 
@@ -45,11 +44,47 @@ def ajoutPassagers(idPassager):
            "nomPassager" : nomPassager,
            "poidBagages" : poidsBagages}
     
-    idPassager += 1
-    
     return passager
 
-idBus = 1
-idPassager = 1
+#On réalise la fonctionnalité d'ajout de passagers aux bus
+#pour cela on va créer une fonction qui iras lire les tableaux contenant les utilisateurs et les bus et faire transiter les informations
+def ajoutPassagersBus(numeroBus):
+    busActuel = buss[numeroBus]
+    print("Voulez-vous remplir le bus ?")
+    nombreACharger = int(input("si oui tapez sur 'Entrer', sinon saisissez lz nombre de places à charger: "))
 
-print(ajoutPassagers(idPassager))
+    if nombreACharger:
+        for i in range(0, nombreACharger):
+            busActuel["passagers"].append(passagers[i])
+            buss[numeroBus] = busActuel
+            busActuel["placesDispo"] -= 1
+    else:
+        for i in range(0, busActuel["placesMax"]):
+            busActuel["passagers"].append(passagers[i])
+            buss[numeroBus] = busActuel
+            busActuel["placesDispo"] -= 1
+
+    return numeroBus
+
+
+idBus = 0
+idPassager = 0
+passagers = []
+buss = []
+
+for i in range(0, 3):
+    buss.append(ajoutBus(idBus))
+    passagers.append(ajoutPassagers(idPassager))
+    idBus += 1
+    idPassager += 1
+
+numeroBus = int(input("Entrer le numero du bus à charger: "))    
+ajoutPassagersBus(numeroBus)
+
+print("")
+print(buss[numeroBus])
+print("")
+
+
+print(passagers)
+print(buss)
