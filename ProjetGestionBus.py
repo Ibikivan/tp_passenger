@@ -1,90 +1,55 @@
-#On implémente la fonctionnalité de création des bus
-def ajoutBus(idBus):
-    #on commence par réunir les informations nécessaire à la création du dictionnaire bus
-    #on commence par récupérer l'identifiant depuis une varible déclaré à l'avance puis on l'incrémentera après exécution de la fonction
-    id = idBus
-    
-    #puis on initialise le tableau contenant le nom des passager
-    passagers = []
-    
-    #et enfin on demande à l'utilisateur soit d'entrer un nombre de places max, soit d'utiliser le nombre de places par défaut
-    print("Voulez-vous utiliser le nombre de places par défaut pour ce bus ?")
-    print("")
-    choixPlaces = input("si oui tapez 'Entrer', sinon entrez directement le NOMBRE DE PLACES pour ce bus : ")
-    nombreDeplaces = 0
-    
-    #S'il n'entre rien on prend le nombre de places par défaut
-    if choixPlaces:
-        nombreDeplaces = int(choixPlaces)
-    else:
-        nombreDeplaces = 50
-    
-    #on crée le dictionnaire et on le retourne    
-    bus = {"busId" : id,
-           "placesMax" : nombreDeplaces,
-           "placesDispo" : nombreDeplaces,
-           "passagers" : passagers}
-    
-    return bus
+import copy
+#nous alons créer un sytème qui crée des bus, des passagers et gère les associations
+#Premièrement nous allons créer un modèle de bus et un model de passagers que les programmes utiliserons pour le procésus de création
 
-#On implémente la fonctionnalité de création des passager
-def ajoutPassagers(idPassager):
-    #on commence par réunir les informations nécessaire à la création du dictionnaire passager
-    #on commence par récupérer l'identifiant depuis une varible déclaré à l'avance puis on l'incrémentera après exécution de la fonction
-    id = idPassager
-    
-    #puis on récurère dans une variable le nom du passager
-    nomPassager = input("Veuillez entrer le nom de ce passage: ")
-    
-    #et enfin on recupère le poid des bagages du passager en question
-    poidsBagages = input("Veuillez indiquer le poid des bagages de ce passager:  ")
-    
-    #on crée le dictionnaire passager et on le retourne    
-    passager = {"idPassager" : id,
-           "nomPassager" : nomPassager,
-           "poidBagages" : poidsBagages}
-    
-    return passager
+modelBus = {
+    "immatriculation" : "",
+    "placesMax" : 0,
+    "passengers" : []
+}
 
-#On réalise la fonctionnalité d'ajout de passagers aux bus
-#pour cela on va créer une fonction qui iras lire les tableaux contenant les utilisateurs et les bus et faire transiter les informations
-def ajoutPassagersBus(numeroBus):
-    busActuel = buss[numeroBus]
-    print("Voulez-vous remplir le bus ?")
-    nombreACharger = int(input("si oui tapez sur 'Entrer', sinon saisissez lz nombre de places à charger: "))
+modelPassenger = {
+    "id" : "",
+    "name" : "",
+    "luggageWeight" : 0
+}
 
-    if nombreACharger:
-        for i in range(0, nombreACharger):
-            busActuel["passagers"].append(passagers[i])
-            buss[numeroBus] = busActuel
-            busActuel["placesDispo"] -= 1
-    else:
-        for i in range(0, busActuel["placesMax"]):
-            busActuel["passagers"].append(passagers[i])
-            buss[numeroBus] = busActuel
-            busActuel["placesDispo"] -= 1
+#créons maintenant une fonction qui va créer un bus à partir du model de bus
+def busAdd(matricule, places):
+    #plus tard on va donner la possibilité à l'utilisateur de selection un nombre de places par défaut
+    #et un système de vérification des entrés
 
-    return numeroBus
+    currentBus = copy.deepcopy(modelBus)
+    currentBus["immatriculation"] = matricule
+    currentBus["placesMax"] = places
+    return currentBus
+
+#Créons une fonction créer un utilisateur à partir du model
+def passengerAdd(id, name, luggageWeight):
+    #ajouter un système de vérification
+    currentPassenger = copy.deepcopy(modelPassenger)
+    currentPassenger["id"] = id
+    currentPassenger["name"] = name
+    currentPassenger["luggageWeight"] = luggageWeight
+    return currentPassenger
+
+#Créons une fonction qui va ajouter un utilisateur à un groupe
+def addUserToBus(user, bus):
+    #il faudra l'associer à une fonction qui vérifie la presence de l'utilisateur avant de l'ajouter
+    bus["passengers"].append(user)
 
 
-idBus = 0
-idPassager = 0
-passagers = []
-buss = []
+bus1 = (busAdd("LT-530", 70))
+bus2 = (busAdd("LT-540", 50))
 
-for i in range(0, 3):
-    buss.append(ajoutBus(idBus))
-    passagers.append(ajoutPassagers(idPassager))
-    idBus += 1
-    idPassager += 1
+hawa = (passengerAdd("175", "Nadia", 110))
+disney = (passengerAdd("176", "Rock", 70))
+maya = (passengerAdd("175", "L'abeille", 89))
+van = (passengerAdd("175", "Ibiki", 15))
 
-numeroBus = int(input("Entrer le numero du bus à charger: "))    
-ajoutPassagersBus(numeroBus)
+addUserToBus(hawa, bus1)
+addUserToBus(van, bus1)
+addUserToBus(maya, bus2)
 
-print("")
-print(buss[numeroBus])
-print("")
-
-
-print(passagers)
-print(buss)
+print(bus1)
+print(bus2)
