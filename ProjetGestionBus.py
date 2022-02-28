@@ -36,7 +36,21 @@ def passengerAdd(id, name, luggageWeight):
 #Créons une fonction qui va ajouter un utilisateur à un groupe
 def addUserToBus(user, bus):
     #il faudra l'associer à une fonction qui vérifie la presence de l'utilisateur avant de l'ajouter
+    #il faudra aussi vérifier qu'il y a de la place dans le bus en question
     bus["passengers"].append(user)
+
+#On va créer une fonction pour connaître le nombre de places disponibes dans un bus
+def isPlacesAvailable(bus):
+    #On compare le nombre de places max du bus avec la longueur du tableau des passagers du bus, le resultat est la solution
+    if bus["placesMax"] > len(bus["passengers"]):
+        return True
+
+#On va compter le nombre de places disponible en faisant une soustraction entre les places max et le nombre de passagers dans le tableau
+def numberOfPlacesAvailable(bus):
+    places = bus["placesMax"] - len(bus["passengers"])
+    return places
+
+#On va caluler le poids total des bagages des utilisateurs dans un bus
 
 
 bus1 = (busAdd("LT-530", 70))
@@ -51,5 +65,4 @@ addUserToBus(hawa, bus1)
 addUserToBus(van, bus1)
 addUserToBus(maya, bus2)
 
-print(bus1)
-print(bus2)
+print(numberOfPlacesAvailable(bus1))
